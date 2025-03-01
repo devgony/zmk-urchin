@@ -217,9 +217,9 @@
 
         move {
             bindings = <
-  &trans  &trans      &trans       &trans  &trans    &L_w      &D_x4          &U_x4         &R_w      &trans
-  &trans  &kp TAB     &trans       &trans  &trans    &kp LEFT  &kp DOWN       &kp UP_ARROW  &kp DOWN  &trans
-  &trans  &kp DELETE  &tap_vim_cc  &trans  &trans    &kp HOME  &kp PAGE_DOWN  &kp PG_UP     &kp END   &trans
+  &trans  &trans      &trans       &trans  &trans    &L_w      &D_x4          &U_x4         &R_w       &trans
+  &trans  &kp TAB     &trans       &trans  &trans    &kp LEFT  &kp DOWN       &kp UP_ARROW  &kp RIGHT  &trans
+  &trans  &kp DELETE  &tap_vim_cc  &trans  &trans    &kp HOME  &kp PAGE_DOWN  &kp PG_UP     &kp END    &trans
                                    &trans  &trans    &trans    &trans
             >;
 
