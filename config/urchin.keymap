@@ -174,13 +174,6 @@
             layers = <4>;
         };
 
-        vim_cb {
-            bindings = <&vim_cb>;
-            key-positions = <22 24>;
-            timeout-ms = <1000>;
-            layers = <2>;
-        };
-
         vim_cw {
             bindings = <&vim_cw>;
             key-positions = <22 1>;
