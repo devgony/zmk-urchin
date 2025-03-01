@@ -147,15 +147,15 @@
         };
 
         TG4_on {
-            bindings = <&tog 4>;
+            bindings = <&tog 3>;
             key-positions = <32 33>;
             layers = <0>;
         };
 
         TG4_off {
-            bindings = <&tog 4>;
+            bindings = <&tog 3>;
             key-positions = <32 33>;
-            layers = <4>;
+            layers = <3>;
         };
 
         vim_cw {
@@ -168,6 +168,11 @@
         vim_cb {
             bindings = <&vim_cb>;
             key-positions = <22 24>;
+        };
+
+        mo_system {
+            bindings = <&mo 4>;
+            key-positions = <19 29>;
         };
     };
 
@@ -208,24 +213,26 @@
             label = "move";
         };
 
-        layer_4 {
-            bindings = <
-  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
-  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
-  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
-                          &trans  &trans    &trans  &trans
-            >;
-        };
-
         pointing {
             bindings = <
-  &trans      &kp F2          &mmv MOVE_UP    &trans           &trans         &kp C_BRI_DN    &kp C_BRI_UP    &kp C_MUTE    &kp C_VOL_DN     &kp C_VOL_UP
-  &kp LSHFT   &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans         &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &kp RSHFT
-  &bt BT_NXT  &bt BT_SEL 1    &bt BT_SEL 1    &bt BT_CLR       &bootloader    &kp HOME        &kp PAGE_DOWN   &kp PG_UP     &kp END          &mkp MB3
-                                              &trans           &trans         &mkp MB1        &mkp MB2
+  &none      &none           &mmv MOVE_UP    &none            &none     &kp C_BRI_DN    &kp C_BRI_UP    &kp C_MUTE    &kp C_VOL_DN     &kp C_VOL_UP
+  &kp LSHFT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &kp RSHFT
+  &none      &none           &none           &none            &none     &kp HOME        &kp PAGE_DOWN   &kp PG_UP     &kp END          &mkp MB3
+                                             &trans           &trans    &mkp MB1        &mkp MB2
             >;
 
             label = "pointing";
+        };
+
+        system {
+            bindings = <
+  &kp F1      &kp F2        &kp F3        &kp F4        &kp F5         &kp F6  &kp F7  &kp F8  &kp F9   &kp F10
+  &bt BT_NXT  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_CLR     &trans  &trans  &trans  &kp F11  &kp F12
+  &sys_reset  &trans        &trans        &trans        &bootloader    &trans  &trans  &trans  &trans   &trans
+                                          &trans        &trans         &trans  &trans
+            >;
+
+            label = "system";
         };
 
         // Main modifiers and arrow keys
