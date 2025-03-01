@@ -175,7 +175,7 @@
         };
 
         vim_cb {
-            bindings = <&none>;
+            bindings = <&vim_cb>;
             key-positions = <22 24>;
             timeout-ms = <1000>;
             layers = <2>;
