@@ -45,17 +45,106 @@
             quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
+
+        tap_vim_cc: tap_vim_cc {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TAP_VIM_CC";
+            #binding-cells = <0>;
+            bindings = <&none>, <&vim_cc>;
+
+            tapping-term-ms = <50>;
+        };
     };
 
     macros {
         // sometimes my device thinks a modifier is being held down
         // pressing all modifiers fixes it.
 
-        unstick: unstick {
-            label = "ZM_unstick";
+        L_w: L_W {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LSHIFT &kp RSHIFT &kp LCTRL &kp RCTRL &kp LALT &kp RALT &kp LGUI &kp RGUI>;
+            bindings =
+                <&macro_press>,
+                <&kp LALT>,
+                <&macro_tap>,
+                <&kp LEFT>,
+                <&macro_release>,
+                <&kp LALT>;
+
+            label = "L_W";
+        };
+
+        D_x4: D_X4 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp DOWN &kp DOWN &kp DOWN &kp DOWN>;
+            label = "D_X4";
+        };
+
+        U_x4: U_X4 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp UP_ARROW &kp UP_ARROW &kp UP_ARROW &kp UP_ARROW>;
+            label = "U_X4";
+        };
+
+        R_w: R_W {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press>,
+                <&kp LALT>,
+                <&macro_tap>,
+                <&kp RIGHT>,
+                <&macro_release>,
+                <&kp LALT>;
+
+            label = "R_W";
+        };
+
+        vim_cb: VIM_C {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press>,
+                <&kp LALT>,
+                <&macro_tap>,
+                <&kp BACKSPACE>,
+                <&macro_release>,
+                <&kp LALT>;
+
+            label = "VIM_C";
+        };
+
+        vim_cw: vim_cw {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press>,
+                <&kp LALT>,
+                <&macro_tap>,
+                <&kp DELETE>,
+                <&macro_release>,
+                <&kp LALT>;
+
+            label = "VIM_CW";
+        };
+
+        vim_cc: vim_cc {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&kp END>,
+                <&macro_press>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp HOME>,
+                <&macro_release>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp DELETE>;
+
+            label = "VIM_CC";
         };
     };
 
@@ -83,6 +172,20 @@
             bindings = <&tog 4>;
             key-positions = <32 33>;
             layers = <4>;
+        };
+
+        vim_cb {
+            bindings = <&none>;
+            key-positions = <22 24>;
+            timeout-ms = <1000>;
+            layers = <2>;
+        };
+
+        vim_cw {
+            bindings = <&vim_cw>;
+            key-positions = <22 1>;
+            timeout-ms = <1000>;
+            layers = <2>;
         };
     };
 
@@ -112,10 +215,10 @@
 
         move {
             bindings = <
-  &trans  &trans      &trans  &trans  &trans    &trans    &trans         &trans        &trans    &trans
-  &trans  &kp TAB     &trans  &trans  &trans    &kp LEFT  &kp DOWN       &kp UP_ARROW  &kp DOWN  &trans
-  &trans  &kp DELETE  &trans  &trans  &trans    &kp HOME  &kp PAGE_DOWN  &kp PG_UP     &kp END   &trans
-                              &trans  &trans    &trans    &trans
+  &trans  &trans      &trans       &trans  &trans    &trans    &trans         &trans        &trans    &trans
+  &trans  &kp TAB     &trans       &trans  &trans    &kp LEFT  &kp DOWN       &kp UP_ARROW  &kp DOWN  &trans
+  &trans  &kp DELETE  &tap_vim_cc  &trans  &trans    &kp HOME  &kp PAGE_DOWN  &kp PG_UP     &kp END   &trans
+                                   &trans  &trans    &trans    &trans
             >;
         };
 
