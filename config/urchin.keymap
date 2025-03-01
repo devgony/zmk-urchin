@@ -168,6 +168,8 @@
         vim_cb {
             bindings = <&vim_cb>;
             key-positions = <22 24>;
+            timeout-ms = <1000>;
+            layers = <2>;
         };
 
         mo_system {
