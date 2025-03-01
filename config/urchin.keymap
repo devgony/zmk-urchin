@@ -147,15 +147,15 @@
         };
 
         TG4_on {
-            bindings = <&tog 3>;
+            bindings = <&tog 4>;
             key-positions = <32 33>;
             layers = <0>;
         };
 
         TG4_off {
-            bindings = <&tog 3>;
+            bindings = <&tog 4>;
             key-positions = <32 33>;
-            layers = <3>;
+            layers = <4>;
         };
 
         vim_cw {
@@ -206,6 +206,15 @@
             >;
 
             label = "move";
+        };
+
+        layer_4 {
+            bindings = <
+  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+                          &trans  &trans    &trans  &trans
+            >;
         };
 
         pointing {
