@@ -24,11 +24,19 @@
 
 // -----------------
 
+&mt { flavor = "tap-preferred"; };
+
 / {
     behaviors {
-        // Enables holding the first mod-tap key
-        // by performing a tap-release-hold sequence.
-        // To use it: "&qt KEYCODE1 KEYCODE2"
+        ht: hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <220>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <100>;
+            bindings = <&kp>, <&kp>;
+        };
 
         tap_vim_cc: tap_vim_cc {
             compatible = "zmk,behavior-tap-dance";
