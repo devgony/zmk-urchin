@@ -24,6 +24,11 @@
 
 &mt { flavor = "tap-preferred"; };
 
+&mmv {
+    time-to-max-speed-ms = <150>;
+    acceleration-exponent = <1>;
+};
+
 / {
     behaviors {
         ht: hold_tap {
