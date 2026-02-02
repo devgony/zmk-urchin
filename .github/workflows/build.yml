@@ -1,5 +1,20 @@
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      board:
+        description: 'Board to build'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - urchin
+          - cradio
 
 jobs:
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    with:
+      build_matrix_path: ${{ inputs.board == 'urchin' && 'build-urchin.yaml' || inputs.board == 'cradio' && 'build-cradio.yaml' || 'build.yaml' }}
