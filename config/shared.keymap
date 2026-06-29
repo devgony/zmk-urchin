@@ -8,6 +8,10 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+
+// Higher mouse top speed: max velocity 1500 (ZMK default 600).
+// Must be defined before including pointing.h (used by MOVE_* defines).
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
 #include <dt-bindings/zmk/pointing.h>
 
 // Layer definitions
@@ -24,8 +28,10 @@
 
 &mt { flavor = "tap-preferred"; };
 
+// Keyboard mouse (ESDF): keep the START fast so direction changes aren't sluggish.
+// acceleration-exponent: 0 = instant max (no ramp), 1 = linear/quick pickup, 2 = slow start.
 &mmv {
-    time-to-max-speed-ms = <150>;
+    time-to-max-speed-ms = <100>;
     acceleration-exponent = <1>;
 };
 
