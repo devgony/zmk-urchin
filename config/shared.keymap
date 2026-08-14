@@ -18,8 +18,28 @@
 //   VAL                         ->  top speed (how hard fine positioning is)
 // Sluggish start? lower time-to-max-speed-ms. Too fast? lower both by the same ratio.
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1100
+
+// Scroll rate, in wheel detents per second. Scroll has NO acceleration ramp
+// (&msc ships acceleration-exponent 0), so the only thing this controls is a flat rate,
+// and first-detent latency is locked to it at 1000 / VAL ms:
+//
+//   VAL     first detent     sustained
+//    10       112 ms          10 /s     <- ZMK default: taps under 112ms scroll nothing
+//    20        64 ms          20 /s
+//    30        48 ms          30 /s
+//    40        32 ms          40 /s
+//    63+       16 ms          62 /s     <- ceiling, one detent every 16ms tick
+//
+// Vertical gets its own higher rate. ZMK has no axis asymmetry - both axes share one
+// rate - but the same detent rate feels far slower vertically because there is much
+// more distance to cover.
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 20  // horizontal, default 10
+
 #include <dt-bindings/zmk/pointing.h>
 #include <input/processors.dtsi>
+
+#define VSCRL_UP   MOVE_Y(40)
+#define VSCRL_DOWN MOVE_Y(-40)
 
 // Layer definitions
 
@@ -44,12 +64,28 @@
     acceleration-exponent = <1>;
 };
 
+// Scroll stays at exponent 0 on purpose: constant rate from the very first detent, so
+// reversing or switching axes never re-ramps. Speed is set by the SCRL values above.
+//
+// Note that with exponent 0 speed() early-returns max_speed, so time-to-max-speed-ms is
+// never read for this behavior. Tuning it does nothing.
+//
+// Do NOT reach for CONFIG_ZMK_POINTING_SMOOTH_SCROLLING to fix scroll latency. At the
+// pinned ZMK revision apply_resolution_scaling() assigns the unscaled value back to the
+// event, and the default multiplier profile makes the divisor 1 anyway, so it changes
+// nothing here - while being reported broken over BLE on macOS (zmk#2957).
+&msc {
+    acceleration-exponent = <0>;
+};
+
 // Precision mode: on the pointing layer, hold the left thumb key that types BACKSPACE
 // on the base layer (position 30) to halve cursor and scroll speed. The other left thumb
 // is left alone so LCMD is still available for cmd-click.
 // The listener re-checks active layers on every input event, so this engages mid-move
 // without resetting the acceleration ramp. The scalers track remainders, so halving
 // does not drop sub-pixel movement.
+// For scroll this lands back near ZMK's stock feel: vertical 40 -> 20/s, horizontal
+// 20 -> 10/s. Note the scaler runs before resolution scaling, so it divides raw detents.
 &mmv_input_listener {
     precision {
         layers = <5>;
@@ -263,9 +299,9 @@
 
         pointing {
             bindings = <
-  &none      &none           &mmv MOVE_UP    &none            &none     &kp C_BRI_DN    &kp C_BRI_UP    &kp C_MUTE    &kp C_VOL_DN     &kp C_VOL_UP
-  &kp LSHFT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &kp RSHFT
-  &none      &none           &trans          &trans           &none     &kp HOME        &kp PAGE_DOWN   &kp PG_UP     &kp END          &mkp MB3
+  &none      &none           &mmv MOVE_UP    &none            &none     &kp C_BRI_DN    &kp C_BRI_UP     &kp C_MUTE     &kp C_VOL_DN     &kp C_VOL_UP
+  &kp LSHFT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none     &msc SCRL_LEFT  &msc VSCRL_DOWN  &msc VSCRL_UP  &msc SCRL_RIGHT  &kp RSHFT
+  &none      &none           &trans          &trans           &none     &kp HOME        &kp PAGE_DOWN    &kp PG_UP      &kp END          &mkp MB3
                                              &mo 5            &trans    &mkp MB1        &mkp MB2
             >;
 
