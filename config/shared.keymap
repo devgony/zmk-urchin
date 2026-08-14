@@ -9,10 +9,17 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 
-// Higher mouse top speed: max velocity 1500 (ZMK default 600).
-// Must be defined before including pointing.h (used by MOVE_* defines).
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
+// Mouse max velocity (ZMK default 600). Must be defined before including
+// pointing.h, which bakes it into the MOVE_* defines.
+//
+// With acceleration-exponent = 1 the speed curve is v(t) = VAL * t / time-to-max-speed-ms,
+// so the two knobs are independent:
+//   VAL / time-to-max-speed-ms  ->  how quickly the cursor picks up from a standstill
+//   VAL                         ->  top speed (how hard fine positioning is)
+// Sluggish start? lower time-to-max-speed-ms. Too fast? lower both by the same ratio.
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1100
 #include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
 
 // Layer definitions
 
@@ -28,11 +35,31 @@
 
 &mt { flavor = "tap-preferred"; };
 
-// Keyboard mouse (ESDF): keep the START fast so direction changes aren't sluggish.
-// acceleration-exponent: 0 = instant max (no ramp), 1 = linear/quick pickup, 2 = slow start.
+// Keyboard mouse (ESDF).
+// acceleration-exponent must stay 1. The ramp is tracked per axis and restarts whenever
+// that axis' net speed hits 0, so with exponent 2 a newly pressed direction is nearly
+// frozen for its first ~50ms and 8-way/diagonal transitions visibly stutter.
 &mmv {
-    time-to-max-speed-ms = <100>;
+    time-to-max-speed-ms = <150>;
     acceleration-exponent = <1>;
+};
+
+// Precision mode: hold the left outer thumb on the pointing layer for half speed.
+// The listener re-checks active layers on every input event, so this engages mid-move
+// without resetting the acceleration ramp. The scalers track remainders, so halving
+// does not drop sub-pixel movement.
+&mmv_input_listener {
+    precision {
+        layers = <5>;
+        input-processors = <&zip_xy_scaler 1 2>;
+    };
+};
+
+&msc_input_listener {
+    precision {
+        layers = <5>;
+        input-processors = <&zip_scroll_scaler 1 2>;
+    };
 };
 
 / {
@@ -237,7 +264,7 @@
   &none      &none           &mmv MOVE_UP    &none            &none     &kp C_BRI_DN    &kp C_BRI_UP    &kp C_MUTE    &kp C_VOL_DN     &kp C_VOL_UP
   &kp LSHFT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &kp RSHFT
   &none      &none           &trans          &trans           &none     &kp HOME        &kp PAGE_DOWN   &kp PG_UP     &kp END          &mkp MB3
-                                             &trans           &trans    &mkp MB1        &mkp MB2
+                                             &mo 5            &trans    &mkp MB1        &mkp MB2
             >;
 
             label = "pointing";
@@ -252,6 +279,20 @@
             >;
 
             label = "system";
+        };
+
+        // Layer 5. Held from the pointing layer's left outer thumb.
+        // Every key is transparent on purpose: this layer exists only so the
+        // mmv/msc input listeners can detect it and halve the movement speed.
+        pointing_precision {
+            bindings = <
+  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+                          &trans  &trans    &trans  &trans
+            >;
+
+            label = "precision";
         };
 
         // Main modifiers and arrow keys
