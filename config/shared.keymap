@@ -299,9 +299,9 @@
 
         pointing {
             bindings = <
-  &none      &none           &mmv MOVE_UP    &none            &none     &kp C_BRI_DN    &kp C_BRI_UP     &kp C_MUTE     &kp C_VOL_DN     &kp C_VOL_UP
-  &kp LSHFT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none     &msc SCRL_LEFT  &msc VSCRL_DOWN  &msc VSCRL_UP  &msc SCRL_RIGHT  &kp RSHFT
-  &none      &none           &trans          &trans           &none     &kp HOME        &kp PAGE_DOWN    &kp PG_UP      &kp END          &mkp MB3
+  &none      &none           &mmv MOVE_UP    &none            &none     &kp C_BRI_DN    &kp C_BRI_UP     &kp C_MUTE       &kp C_VOL_DN     &kp C_VOL_UP
+  &kp LSHFT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none     &msc SCRL_LEFT  &msc VSCRL_UP    &msc VSCRL_DOWN  &msc SCRL_RIGHT  &kp RSHFT
+  &none      &none           &trans          &trans           &none     &kp HOME        &kp PAGE_DOWN    &kp PG_UP        &kp END          &mkp MB3
                                              &mo 5            &trans    &mkp MB1        &mkp MB2
             >;
 
