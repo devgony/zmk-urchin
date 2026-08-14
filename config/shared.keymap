@@ -44,7 +44,9 @@
     acceleration-exponent = <1>;
 };
 
-// Precision mode: hold the left outer thumb on the pointing layer for half speed.
+// Precision mode: on the pointing layer, hold the left thumb key that types BACKSPACE
+// on the base layer (position 30) to halve cursor and scroll speed. The other left thumb
+// is left alone so LCMD is still available for cmd-click.
 // The listener re-checks active layers on every input event, so this engages mid-move
 // without resetting the acceleration ramp. The scalers track remainders, so halving
 // does not drop sub-pixel movement.
@@ -281,7 +283,7 @@
             label = "system";
         };
 
-        // Layer 5. Held from the pointing layer's left outer thumb.
+        // Layer 5. Held from the pointing layer's left BACKSPACE thumb (position 30).
         // Every key is transparent on purpose: this layer exists only so the
         // mmv/msc input listeners can detect it and halve the movement speed.
         pointing_precision {
