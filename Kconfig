@@ -1,0 +1,7 @@
+# Sync the "windows" keymap layer with the active BLE profile.
+# Only meaningful where the keymap is processed: standalone boards or the
+# central half of a split. Peripherals and settings_reset never need it.
+config ZMK_PROFILE_LAYER_SYNC
+    bool "Sync windows layer to the active BLE profile"
+    default y
+    depends on ZMK_BLE && (!ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL)

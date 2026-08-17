@@ -120,20 +120,6 @@
 
             tapping-term-ms = <50>;
         };
-
-        // Deterministic layer on/off (plain &tog would flip state, so pressing
-        // the same profile key twice would desync layer and BT profile).
-        tog_on: tog_on {
-            compatible = "zmk,behavior-toggle-layer";
-            #binding-cells = <1>;
-            toggle-mode = "on";
-        };
-
-        tog_off: tog_off {
-            compatible = "zmk,behavior-toggle-layer";
-            #binding-cells = <1>;
-            toggle-mode = "off";
-        };
     };
 
     macros {
@@ -226,25 +212,6 @@
 
             label = "VIM_CC";
         };
-
-        // OS-aware profile selectors: BT profile 0 = macOS, 1 = Windows.
-        // Selecting a profile also forces the windows layer (1) on/off so the
-        // COMMA mod-tap sends LCMD on macOS and RCMD on Windows.
-        // Caveats: layer state is not persisted across reboots, and &bt BT_NXT
-        // bypasses this sync - reselect the profile explicitly in those cases.
-        select_mac: select_mac {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&bt BT_SEL 0>, <&tog_off 1>;
-            label = "SELECT_MAC";
-        };
-
-        select_win: select_win {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&bt BT_SEL 1>, <&tog_on 1>;
-            label = "SELECT_WIN";
-        };
     };
 
     combos {
@@ -311,8 +278,9 @@
         // Windows override layer. Only remaps the COMMA mod-tap to RCMD
         // (macOS default on Base is LCMD). Sits directly above Base so the
         // higher layers (number/move/pointing/...) still take precedence at
-        // this position. Toggled by &select_win / &select_mac along with the
-        // BT profile (0 = macOS, 1 = Windows).
+        // this position. Activated automatically by src/profile_layer_sync.c
+        // whenever BT profile 1 (Windows host) is active - keep this layer at
+        // index 1 or update WINDOWS_LAYER_INDEX there.
         windows {
             label = "win";
             bindings = <
@@ -359,7 +327,7 @@
         system {
             bindings = <
   &kp F1      &kp F2        &kp F3        &kp F4        &kp F5         &kp F6  &kp F7  &kp F8  &kp F9   &kp F10
-  &bt BT_NXT  &select_mac   &select_win   &bt BT_SEL 2  &bt BT_CLR     &trans  &trans  &trans  &kp F11  &kp F12
+  &bt BT_NXT  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_CLR     &trans  &trans  &trans  &kp F11  &kp F12
   &sys_reset  &trans        &trans        &trans        &bootloader    &trans  &trans  &trans  &trans   &trans
                                           &trans        &trans         &trans  &trans
             >;
